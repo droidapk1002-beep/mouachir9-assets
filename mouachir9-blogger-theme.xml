@@ -875,12 +875,13 @@ body { margin: 0 !important; padding: 0 !important; }
       <div class="result-banner" id="download-result"></div>
     </section>
 
+    <b:section id='hidden-section' maxwidgets='0' showaddelement='no'/>
     <footer class="bottom">
       مؤشر · جمع محلي للوثائق المدرسية الجزائرية · يعمل بالكامل على جهازك
     </footer>
   </div>
 
-  <script src='https://cdn.jsdelivr.net/gh/droidapk1002-beep/mouachir9-assets@master/repo/js/app.js?v=1'/>
+  <script src='https://cdn.jsdelivr.net/gh/droidapk1002-beep/mouachir9-assets@master/repo/js/app.js?v=1'></script>
 
 </body>
 </html>

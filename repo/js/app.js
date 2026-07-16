@@ -1,4 +1,4 @@
-var MOUACHIR_API = '';
+var MOUACHIR_API = 'https://mouachir9-backend.onrender.com';
 
 const state = {
   site: null,
