@@ -1,0 +1,886 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' b:templateVersion='1.0.0' expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+  <meta content='noindex' name='robots'/>
+  <title>مؤشر — لوحة جمع الوثائق المدرسية</title>
+  <link href='https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Zain:wght@700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Zain:wght@700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap' rel='stylesheet'/>
+
+<b:skin><![CDATA[
+/* =============================================================================
+   style.css — Dashboard Mou'achir (مؤشر)
+   Palette : encre profonde, papier crème, vert sourdine, accent ambre.
+   ============================================================================= */
+
+:root {
+  --ink-950: #0f1410;
+  --ink-900: #161d17;
+  --ink-800: #1f2820;
+  --paper: #f4f1e8;
+  --paper-dim: #e8e3d4;
+  --line: #34402f;
+  --line-soft: #2a3326;
+  --green-500: #4f7a52;
+  --green-400: #6b9a6e;
+  --green-300: #9bc09d;
+  --amber-500: #c98a3b;
+  --amber-400: #e0a85a;
+  --red-500: #b25243;
+  --text-1: #eef0e6;
+  --text-2: #b7bfae;
+  --text-3: #828a78;
+
+  --font-display: "Zain", "Tajawal", "Cairo", sans-serif;
+  --font-body: "Tajawal", "IBM Plex Sans Arabic", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ink-950) !important;
+  color: var(--text-1);
+  font-family: var(--font-body);
+  direction: rtl;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(107, 154, 110, 0.12), transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(201, 138, 59, 0.08), transparent 50%) !important;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--green-400); color: var(--ink-950); }
+
+/* ── Layout général ─────────────────────────────────────────────────────── */
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 80px;
+}
+
+header.top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.brand .mark {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-1);
+}
+
+.brand .mark span { color: var(--amber-400); }
+
+.brand .tagline {
+  font-size: 13px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+}
+
+.sources {
+  display: flex;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+}
+
+.sources .pill {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ── Cartes de site (sélecteur) ────────────────────────────────────────── */
+
+.site-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 760px) {
+  .site-grid { grid-template-columns: 1fr; }
+}
+
+.site-card {
+  background: linear-gradient(180deg, var(--ink-900), var(--ink-800));
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.site-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(107, 154, 110, 0.0), rgba(107, 154, 110, 0.0));
+  transition: background 0.2s ease;
+}
+
+.site-card:hover { transform: translateY(-2px); border-color: var(--green-400); }
+.site-card.active {
+  border-color: var(--amber-400);
+  box-shadow: 0 0 0 1px var(--amber-400) inset;
+}
+.site-card.active::before {
+  background: linear-gradient(135deg, rgba(224, 168, 90, 0.10), transparent 60%);
+}
+
+.site-card .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 1px;
+}
+
+.site-card h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  margin: 6px 0 4px;
+  color: var(--text-1);
+}
+
+.site-card p {
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin: 0;
+  direction: ltr;
+  text-align: right;
+}
+
+/* ── Panneau de contrôle ───────────────────────────────────────────────── */
+
+.panel {
+  background: var(--ink-900);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.panel h4 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--green-300);
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel h4::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--amber-400);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.field-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.field {
+  flex: 1;
+  min-width: 180px;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+}
+
+select, input[type="text"] {
+  width: 100%;
+  background: var(--ink-950);
+  border: 1px solid var(--line);
+  color: var(--text-1);
+  padding: 10px 12px;
+  border-radius: 7px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  appearance: none;
+}
+
+select:focus, input:focus {
+  outline: none;
+  border-color: var(--green-400);
+}
+
+select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Matières (checkboxes en chips) */
+
+.matieres-grid {
+  margin-top: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+
+.matieres-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.btn-mini {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-2);
+  border-radius: 6px;
+  padding: 5px 11px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-mini:hover {
+  border-color: var(--green-400);
+  color: var(--text-1);
+}
+
+.matieres-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-2);
+  background: var(--ink-950);
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.chip:hover { border-color: var(--green-400); color: var(--text-1); }
+
+.chip.selected {
+  background: var(--green-500);
+  border-color: var(--green-500);
+  color: var(--ink-950);
+  font-weight: 600;
+}
+
+.chip-empty {
+  color: var(--text-3);
+  font-size: 13px;
+  font-family: var(--font-mono);
+}
+
+.cloud-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-cloud {
+  background: linear-gradient(135deg, #2d7dd2, #1a5fa8);
+  color: #fff;
+}
+.btn-cloud:hover:not(:disabled) { filter: brightness(1.12); }
+
+/* ── Boutons ───────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 7px;
+  padding: 11px 22px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-primary { background: var(--green-500); color: #fff; }
+.btn-primary:hover:not(:disabled) { filter: brightness(1.12); }
+
+.btn-amber { background: var(--amber-500); color: var(--ink-950); }
+.btn-amber:hover:not(:disabled) { filter: brightness(1.12); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-2);
+}
+.btn-ghost:hover:not(:disabled) { border-color: var(--red-500); color: var(--red-500); }
+
+.btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+/* ── Bloc progression / logs ──────────────────────────────────────────── */
+
+.progress-wrap {
+  margin-top: 18px;
+  display: none;
+}
+.progress-wrap.visible { display: block; }
+
+.progress-bar-bg {
+  height: 8px;
+  background: var(--ink-950);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--green-500), var(--amber-400));
+  transition: width 0.25s ease;
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-2);
+  margin-bottom: 10px;
+}
+
+.progress-stats .ok { color: var(--green-300); }
+.progress-stats .err { color: var(--red-500); }
+
+.log-box {
+  background: var(--ink-950);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px 12px;
+  max-height: 220px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-2);
+  direction: ltr;
+  text-align: left;
+}
+
+.log-box .line { padding: 2px 0; white-space: pre-wrap; word-break: break-word; }
+.log-box .line.err { color: var(--red-500); }
+.log-box .line.ok { color: var(--green-300); }
+
+/* ── Tableau des fiches découvertes ───────────────────────────────────── */
+
+.fiches-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fiches-count {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.fiches-count b { color: var(--amber-400); }
+
+.filtres-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: var(--ink-900);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+}
+
+.filtre-input {
+  background: var(--ink-950);
+  border: 1px solid var(--line);
+  color: var(--text-1);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-family: var(--font-body);
+  min-width: 110px;
+  flex: 1 1 auto;
+  max-width: 200px;
+}
+
+.filtre-input:focus { outline: none; border-color: var(--green-400); }
+
+#filtre-titre { max-width: 240px; direction: rtl; }
+
+.fiches-list {
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+}
+
+table.fiches {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+table.fiches thead th {
+  position: sticky;
+  top: 0;
+  background: var(--ink-800);
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--line);
+  z-index: 2;
+}
+
+table.fiches tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--text-1);
+  vertical-align: middle;
+}
+
+table.fiches tbody tr:hover { background: rgba(107, 154, 110, 0.06); }
+
+table.fiches td.titre { max-width: 420px; }
+table.fiches td.badge-cell { white-space: nowrap; }
+
+.badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  color: var(--text-3);
+}
+
+.badge.corrige { color: var(--green-300); border-color: var(--green-500); }
+.badge.examen { color: var(--amber-400); border-color: var(--amber-500); }
+.badge.devoir { color: var(--text-2); }
+
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--green-500);
+  cursor: pointer;
+}
+
+/* ── Empty / placeholder states ───────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--text-3);
+  font-size: 13.5px;
+}
+
+.empty-state .glyph {
+  font-size: 30px;
+  margin-bottom: 10px;
+  opacity: 0.6;
+}
+
+/* ── Footer / résultat final ──────────────────────────────────────────── */
+
+.result-banner {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  background: rgba(107, 154, 110, 0.08);
+  border: 1px solid var(--green-500);
+  font-size: 13.5px;
+  color: var(--text-1);
+  display: none;
+}
+.result-banner.visible { display: block; }
+
+.result-banner a.dl-link {
+  color: var(--amber-400);
+  font-family: var(--font-mono);
+  text-decoration: underline;
+}
+
+.cloud-liens-list {
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 8px;
+}
+
+.cloud-lien-item {
+  font-size: 12.5px;
+  padding: 4px 0;
+  direction: ltr;
+  text-align: left;
+  color: var(--text-2);
+}
+
+/* Scrollbars discrètes */
+.fiches-list::-webkit-scrollbar,
+.log-box::-webkit-scrollbar,
+.matieres-grid::-webkit-scrollbar {
+  width: 8px;
+}
+.fiches-list::-webkit-scrollbar-thumb,
+.log-box::-webkit-scrollbar-thumb,
+.matieres-grid::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.vbtn {
+  background: var(--ink-800);
+  border: 1px solid var(--line);
+  color: var(--text-3);
+  border-radius: 6px;
+  padding: 5px 11px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.vbtn:hover { border-color: var(--green-400); color: var(--text-1); }
+
+.vbtn.act {
+  background: var(--green-500);
+  border-color: var(--green-500);
+  color: var(--ink-950);
+  font-weight: 600;
+}
+
+/* ── Cards grid ────────────────────────────────────────────────── */
+
+.fc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+  padding: 12px;
+}
+
+.fc {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--ink-800);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  padding: 12px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.fc:hover { border-color: var(--green-400); }
+
+.fc-cb {
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.fc-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.fc-titre {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 6px;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.btn-voir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: 4px;
+  opacity: 0.6;
+  transition: opacity .15s, background .15s;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+.btn-voir:hover { opacity: 1; background: var(--line-soft); }
+
+.fc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-3);
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+}
+
+.fc-mat { color: var(--amber-400); }
+.fc-trim { color: var(--text-2); }
+.fc-annee { color: var(--text-3); }
+
+.fc-filiere {
+  color: var(--green-300);
+  border: 1px solid var(--green-500);
+  border-radius: 3px;
+  padding: 0 5px;
+}
+
+.fc-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+footer.bottom {
+  text-align: center;
+  padding-top: 30px;
+  color: var(--text-3);
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+
+/* ── Blogger overrides ─────────────────────────────────────────── */
+body { margin: 0 !important; padding: 0 !important; }
+]]></b:skin>
+
+</head>
+<body>
+  <div class="shell">
+
+    <header class="top">
+      <div class="brand">
+        <span class="mark">مؤشر<span>.</span></span>
+        <span class="tagline">DZ EXAMS AGGREGATOR — local scraping dashboard</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" id="btn-reinitialiser">↺ إعادة التهيئة — Réinitialiser</button>
+        <div class="sources">
+          <span class="pill">DzExams</span>
+          <span class="pill">Eddirasa</span>
+          <span class="pill">Ency-Education</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ÉTAPE 1 : choix du site source -->
+    <section class="site-grid">
+      <div class="site-card" data-site="dzexams">
+        <div class="num">SOURCE · 1/3</div>
+        <h3>DzExams</h3>
+        <p>https://www.dzexams.com</p>
+      </div>
+      <div class="site-card" data-site="eddirasa">
+        <div class="num">SOURCE · 2/3</div>
+        <h3>Eddirasa</h3>
+        <p>https://eddirasa.com</p>
+      </div>
+      <div class="site-card" data-site="ency">
+        <div class="num">SOURCE · 3/3</div>
+        <h3>Ency-Education</h3>
+        <p>https://www.ency-education.net</p>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 2 : choix cycle / niveau / matières -->
+    <section class="panel" id="panel-niveau" style="display:none;">
+      <h4>تحديد المستوى الدراسي</h4>
+      <div class="field-row">
+        <div class="field">
+          <label>الطور / Cycle</label>
+          <select id="select-cycle">
+            <option value="">— choisir un site d'abord —</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>السنة الدراسية / Niveau</label>
+          <select id="select-niveau" disabled="disabled">
+            <option value="">— choisir le cycle d'abord —</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>تصفية حسب المادة (اختياري) / Filtrer par matière (optionnel)</label>
+        <div class="matieres-grid" id="matieres-grid">
+          <span class="chip-empty">choisir un niveau pour voir les matières</span>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-primary" id="btn-decouvrir" disabled="disabled">🔎 بدء الاستكشاف — Lancer la découverte</button>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 3 : résultats de la découverte -->
+    <section class="panel" id="panel-fiches" style="display:none;">
+      <div class="fiches-toolbar" style="margin-bottom:14px;">
+        <h4 style="margin:0;">نتائج الاستكشاف</h4>
+        <div class="view-toggle">
+          <button class="vbtn act" data-view="table" onclick="changerVue('table')">☰ Tableau</button>
+          <button class="vbtn" data-view="cards" onclick="changerVue('cards')">▦ Cartes</button>
+        </div>
+        <button class="btn btn-ghost" id="btn-annuler-decouverte" style="display:none;">⏹ Annuler</button>
+      </div>
+
+      <div class="progress-wrap" id="fiches-progress">
+        <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
+        <div class="progress-stats"><span>0/0</span><span></span></div>
+        <div id="fiches-elapsed" style="font-family:var(--font-mono); font-size:11.5px; color:var(--text-3); margin-bottom:8px;"></div>
+        <div class="log-box" id="fiches-log"></div>
+      </div>
+
+      <div class="fiches-toolbar">
+        <span class="fiches-count" id="fiches-count"></span>
+      </div>
+
+      <div class="filtres-row" id="filtres-row" style="display:none;">
+        <input type="text" class="filtre-input" id="filtre-titre" placeholder="🔎 العنوان..."/>
+        <select class="filtre-input" id="filtre-matiere"><option value="">كل المواد</option></select>
+        <select class="filtre-input" id="filtre-filiere" style="display:none;"><option value="">كل الشعب</option></select>
+        <select class="filtre-input" id="filtre-trimestre">
+          <option value="">كل الفصول</option>
+          <option value="1">الفصل الأول</option>
+          <option value="2">الفصل الثاني</option>
+          <option value="3">الفصل الثالث</option>
+        </select>
+        <select class="filtre-input" id="filtre-annee"><option value="">كل السنوات</option></select>
+        <select class="filtre-input" id="filtre-type">
+          <option value="">الكل (فرض/امتحان)</option>
+          <option value="D">فرض</option>
+          <option value="E">امتحان</option>
+        </select>
+        <select class="filtre-input" id="filtre-corrige">
+          <option value="">مصحح + غير مصحح</option>
+          <option value="1">✓ مصحح فقط</option>
+          <option value="0">غير مصحح فقط</option>
+        </select>
+        <input type="number" class="filtre-input" id="filtre-limite" placeholder="حد العرض…" min="0" style="max-width:90px;"/>
+        <button class="btn-mini" id="btn-effacer-filtres">✗ Effacer les filtres</button>
+      </div>
+
+      <div class="fiches-list" id="fiches-table-wrap">
+        <div class="empty-state"><div class="glyph">⌕</div>Lancez une découverte pour voir les fiches disponibles.</div>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 4 : téléchargement -->
+    <section class="panel" id="panel-download" style="display:none;">
+      <h4>التحميل</h4>
+      <div class="btn-row" style="margin-bottom:10px; flex-wrap:wrap;">
+        <button class="btn btn-amber" id="btn-telecharger">⬇ تحميل عادي — Téléchargement normal</button>
+        <button class="btn btn-primary" id="btn-telecharger-zip">🗜 تحميل كملف ZIP — Télécharger en .zip</button>
+        <button class="btn btn-ghost" id="btn-annuler-telechargement" style="display:none;">⏹ Annuler</button>
+      </div>
+
+      <div class="cloud-row" id="cloud-row" style="display:none;">
+        <select class="filtre-input" id="select-cloud-compte" style="max-width:260px;"></select>
+        <button class="btn btn-cloud" id="btn-telecharger-cloud">☁ Envoyer vers le cloud</button>
+        <button class="btn btn-cloud" id="btn-telecharger-plus-cloud">⬇☁ Télécharger + Cloud</button>
+        <button class="btn btn-ghost" id="btn-connecter-cloud" style="display:none;">🔑 Connecter ce compte</button>
+        <label class="checkbox-label" style="margin-right:12px; font-size:13px; cursor:pointer;">
+          <input type="checkbox" id="chk-separer-corrige" checked="checked"/>
+          فصل المصحح — Séparer corrigé
+        </label>
+        <label class="checkbox-label" style="margin-right:12px; font-size:13px; cursor:pointer;">
+          <input type="checkbox" id="chk-clean-pdf" checked="checked"/>
+          تنظيف PDF — Nettoyer PDF
+        </label>
+        <label class="checkbox-label" style="margin-right:12px; font-size:13px; cursor:pointer;">
+          <input type="checkbox" id="chk-cover-footer"/>
+          تغطية التذييل — Couvrir pied de page
+        </label>
+      </div>
+
+      <div class="progress-wrap" id="download-progress">
+        <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
+        <div class="progress-stats"><span>0/0</span><span></span></div>
+        <div class="log-box" id="download-log"></div>
+      </div>
+
+      <div class="result-banner" id="download-result"></div>
+    </section>
+
+    <footer class="bottom">
+      مؤشر · جمع محلي للوثائق المدرسية الجزائرية · يعمل بالكامل على جهازك
+    </footer>
+  </div>
+
+  <script src='https://cdn.jsdelivr.net/gh/droidapk1002-beep/mouachir9-assets@master/repo/js/app.js?v=1'/>
+
+</body>
+</html>
