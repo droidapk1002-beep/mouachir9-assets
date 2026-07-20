@@ -687,7 +687,8 @@ document.addEventListener("click", (e) => {
       var base = MOUACHIR_API || '';
       fetch(base + "/api/cloud/google/auth?compte=" + encodeURIComponent(compte))
         .then(r => r.json())
-        .then(() => {
+        .then(d => {
+          if (d.url) window.open(d.url, "cloud-oauth", "width=500,height=600,left=200,top=100");
           const poll = setInterval(() => {
             fetch(base + "/api/cloud/google/auth-status/" + encodeURIComponent(compte))
               .then(r => r.json())
